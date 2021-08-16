@@ -62,14 +62,12 @@ GET '/categories'
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
-```
 
 GET '/questions'
 - Fetches a dictionary of questions in which the keys are the ids and some values returned is categories, questions, success and total_questions. 
 - Request Arguments: None
 - Returns: An object with a categories(id, type), questions(answer, category, difficulty, id, question), total_questions and message to success.
-{
-  "categories": {
+{"categories": {
     "1": "Science", 
     "2": "Art", 
     "3": "Geography", 
@@ -101,9 +99,7 @@ GET '/questions'
     }
   ], 
   "success": true, 
-  "total_questions": 3
-}
-```
+  "total_questions": 3}
 
 GET '/categories/<int:category_id>/questions'
 - Fetches a dictionary of questions by category_id in which the keys are the ids and some values returned is success, question, current_category and total_questions. 
@@ -137,7 +133,6 @@ GET '/categories/<int:category_id>/questions'
   "current_category":1
   "total_questions": 3
 }
-```
 
 POST '/questions'
 - General:
@@ -171,7 +166,6 @@ POST '/questions'
   "success": true,
   "total_questions": 3
 }
-```
 
 POST '/questions'
 - General:
@@ -203,7 +197,6 @@ POST '/questions'
   "success": true,
   "total_questions": 3
 }
-```
 
 POST '/quizzes'
 - General:
@@ -220,7 +213,6 @@ POST '/quizzes'
   ], 
   "success": true
 }
-```
 
 DELETE '/questions/<int:id>'
 - DELETE a question by id
