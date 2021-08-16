@@ -40,66 +40,219 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## ToDo Tasks
-These are the files you'd want to edit in the backend:
-
-1. *./backend/flaskr/`__init__.py`*
-2. *./backend/test_flaskr.py*
-
-
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior. 
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers. 
-
-
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories. 
-
-
-3. Create an endpoint to handle GET requests for all available categories. 
-
-
-4. Create an endpoint to DELETE question using a question ID. 
-
-
-5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
-
-
-6. Create a POST endpoint to get questions based on category. 
-
-
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
-
-
-8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
-
-
-9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
-
-
-
 ## Review Comment to the Students
 ```
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
 Endpoints
-GET '/api/v1.0/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/categories'
+GET '/questions'
+GET '/categories/<int:category_id>/questions'
+POST '/questions'
+POST '/quizzes'
+DELETE '/questions/<int:id>'
 
-GET '/api/v1.0/categories'
+GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
+- Returns: An object with a single key, categories, that contains a object of id: category_string key: value pairs. 
 {'1' : "Science",
 '2' : "Art",
 '3' : "Geography",
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
-
 ```
 
+GET '/questions'
+- Fetches a dictionary of questions in which the keys are the ids and some values returned is categories, questions, success and total_questions. 
+- Request Arguments: None
+- Returns: An object with a categories(id, type), questions(answer, category, difficulty, id, question), total_questions and message to success.
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 5, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 4, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 3
+}
+```
+
+GET '/categories/<int:category_id>/questions'
+- Fetches a dictionary of questions by category_id in which the keys are the ids and some values returned is success, question, current_category and total_questions. 
+- Request Arguments: <int:category_id>
+- Returns: An object with a current_categories, questions(answer, category, difficulty, id, question), total_questions and message to success.
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "Maya Angelou", 
+      "category": 1, 
+      "difficulty": 2, 
+      "id": 5, 
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    }
+  ], 
+  "success": true, 
+  "current_category":1
+  "total_questions": 3
+}
+```
+
+POST '/questions'
+- General:
+    - Creates a new question using the submitted question, answer, category and difficulty. Returns the id of the created question, success value, total questions, and question list based on current page number to update the frontend. 
+- `curl -X POST -H "Content-Type: application/json" -d '{"question":"New question", "answer":"answer", "category":1, "difficulty":1}' http://127.0.0.1:5000/questions'`
+
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "answer", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": x, 
+      "question": "New question"
+    }
+  ], 
+  "success": true,
+  "total_questions": 3
+}
+```
+
+POST '/questions'
+- General:
+    - Search a question using the submitted search term. Returns success value, total questions and question list based on current page number to update the frontend. 
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "answer", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": x, 
+      "question": "New question"
+    }
+  ], 
+  "success": true,
+  "total_questions": 3
+}
+```
+
+POST '/quizzes'
+- General:
+    - Allow return a different question to previus question using the submitted previous_questions and quiz_category. Returns success value and question list based on category number to update the frontend. 
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ], 
+  "success": true
+}
+```
+
+DELETE '/questions/<int:id>'
+- DELETE a question by id
+- Request Arguments: id 
+- Returns: Returns success value, id deleted question and question list to update the frontend. 
+{
+  "questions": [
+    {
+      "answer": "Apollo 13", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 2, 
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }, 
+    {
+      "answer": "Tom Cruise", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 4, 
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }, 
+    {
+      "answer": "answer", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": x, 
+      "question": "New question"
+    }
+  ], 
+  "success": true,
+  "total_questions": 3
+```
 
 ## Testing
 To run the tests, run
